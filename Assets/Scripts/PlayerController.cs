@@ -24,12 +24,12 @@ public class PlayerController : MonoBehaviour
    public GameOverScreen gameOverScreen;
    public VictoryScreen victoryScreen;
    [SerializeField] private TextMeshProUGUI timerText;
-   [SerializeField]float remainingTime;
+   [SerializeField] float remainingTime;
 
    private float timeSpecial;
    private float timeSpecialLives;
 
-
+   public AudioManager audioManager;
 
 
    // Start is called before the first frame update.
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
       // Get and store the Rigidbody component attached to the player.
          rb = GetComponent<Rigidbody>();
          count = 0;
-         lives = 30;
+         lives = 4;
          SetCountText();
          SetLiveText();
          Time.timeScale = 1;
@@ -92,21 +92,25 @@ public class PlayerController : MonoBehaviour
       // Check if the object the player collided with has the "PickUp" tag.
       if (other.gameObject.CompareTag("PickUp")) {
          // Deactivate the collided object (making it disappear).
+         audioManager.PlaySFX(audioManager.coin);
          other.gameObject.SetActive(false);
          count = count + 1;
          SetCountText();
       } else if (other.gameObject.CompareTag("TripleCandle")){
+         audioManager.PlaySFX(audioManager.damage);
          lives = lives -1;
          timeSpecialLives = 5;
          livesText.color = Color.red;
          SetLiveText();
       } else if (other.gameObject.CompareTag("PlusLive")){
+         audioManager.PlaySFX(audioManager.special);
          other.gameObject.SetActive(false);
          timeSpecialLives = 5;
          lives = lives + 1;
          livesText.color = Color.green;
          SetLiveText();
       } else if (other.gameObject.CompareTag("PlusTime")){
+         audioManager.PlaySFX(audioManager.special);
          other.gameObject.SetActive(false);
          remainingTime = remainingTime +  15;
          timeSpecial = 10;
@@ -125,7 +129,7 @@ public class PlayerController : MonoBehaviour
             remainingTime -= Time.deltaTime;
             if (timeSpecial > 0){
                timeSpecial -= Time.deltaTime;
-            } else timerText.color = Color.white;
+            } else timerText.color = Color.black;
             if (timeSpecialLives > 0){
                timeSpecialLives -= Time.deltaTime;
             } else livesText.color = Color.black;
@@ -134,11 +138,15 @@ public class PlayerController : MonoBehaviour
     }
 
    public void GameOver(){
+      audioManager.PlaySFX(audioManager.death);
+      audioManager.StopMusic();
       gameOverScreen.Setup(count);
       Time.timeScale = 0;
    }
 
    public void Victory(){
+      audioManager.PlaySFX(audioManager.victory);
+      audioManager.StopMusic();
       victoryScreen.Setup(lives);
       Time.timeScale = 0;
    }

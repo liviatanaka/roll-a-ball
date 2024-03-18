@@ -8,6 +8,7 @@ TagManager:
   - TripleCandle
   - PlusLive
   - PlusTime
+  - Audio
   layers:
   - Default
   - TransparentFX
