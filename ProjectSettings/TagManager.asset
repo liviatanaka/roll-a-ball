@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - PickUp
+  - TripleCandle
+  - PlusLive
+  - PlusTime
   layers:
   - Default
   - TransparentFX
